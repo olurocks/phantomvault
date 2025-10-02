@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  phantomv:
+    build:
+      context: ./phantomv
+      dockerfile: ./Dockerfile
+    container_name: ctf-phantomv
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - FLAG_SECRET=${FLAG_SECRET:-default_secret_change_me}
+    volumes:
+      - phantomv-data:/app/data
+      - ./phantomv/.env.local:/app/.env.local:ro
+    restart: unless-stopped
+    networks:
+      - ctf-network
+
+volumes:
+  phantomv-data:
+    driver: local
+
+networks:
+  ctf-network:
+    driver: bridge
